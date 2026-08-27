@@ -30,7 +30,7 @@ nested full runtime config           -> THREAD_OK
 
 The Desktop-style dotted leaf therefore merges correctly **when a valid `codex_app` base transport already exists**.
 
-Static analysis of this build strongly suggests the local WSL launch path does not materialize the complete `getConfigOverrides()`-provided `codex_app` base before spawning the WSL CLI. I am treating this as root-cause evidence rather than a claim about intended architecture.
+Root-cause evidence strongly indicates that, on this affected build/path, the local WSL launch path does not materialize the complete `getConfigOverrides()`-provided `codex_app` base before spawning the WSL CLI. This is evidence from the observed behavior and static analysis, not a claim about OpenAI's intended internal architecture.
 
 ### Working workaround
 
@@ -63,8 +63,13 @@ After restarting the **original Codex Desktop**:
 
 - the `invalid transport` failure disappeared;
 - normal Desktop and project/workspace chats worked;
+- `codex_app` remained functional;
 - all five Codex app tools were exposed:
-  `automation_update`, `create_thread`, `send_message_to_thread`, `fork_thread`, `handoff_thread`;
+  - `automation_update`
+  - `create_thread`
+  - `send_message_to_thread`
+  - `fork_thread`
+  - `handoff_thread`
 - a **real `create_thread` invocation succeeded** with `hostId: local`;
 - the child chat was created successfully.
 
@@ -76,9 +81,13 @@ mcp_servers.codex_app.enabled_tools=["automation_update"]
 
 preserves stdio transport, command, and cwd when the base exists.
 
-Full reproduction package, sanitized config, validation script, and evidence screenshot:
+The reproduction package is already public here:
 
 https://github.com/AetheraSoftware/aethera-codex-40715-wsl-workaround
+
+Evidence screenshot of the successful real `create_thread` call:
+
+https://github.com/AetheraSoftware/aethera-codex-40715-wsl-workaround/blob/main/evidence/create-thread-success.png
 
 **Alexsander Oliveira**  
 Founder & Technical Director  
